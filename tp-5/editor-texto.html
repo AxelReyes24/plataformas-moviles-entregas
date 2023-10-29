@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editor de Texto - DOM y JavaScript</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style type="text/css">
+        .bold {
+            font-weight: bold;
+        }
+        .italic {
+            font-style: italic;
+        }
+        .underline {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-1 my-sm-2 my-md-4 my-lg-5">
+    <h1>Editor de Texto</h1>
+    <p class="lead">El objetivo es construir un muy simple Editor de Texto donde se puedan aplicar distintos estilos a un texto.</p>
+    <h2 class="h3">Objetivos Adicionales</h2>
+    <ol>
+        <li>Agregar un nuevo botón con un estilo adicional (puede ser para aplicar un color al texto, por ejemplo).</li>
+        <li>Agregar la posibilidad de editar el texto, con un input para escribir un nuevo texto.</li>
+        <li>Mostrar el estado actual de cada estilo en el botón (si está activado o no). Puede ser cambiando el color o el texto del propio botón.</li>
+        <li>Agregar la funcionalidad de modificar el tamaño del texto.</li>
+    </ol>
+
+    <!-- Card de Aplicación -->
+    <div class="card">
+        <div class="card-body">
+            <h2>Texto</h2>
+
+            <p class="texto" id="texto">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum auctor libero, vel imperdiet est. Etiam blandit facilisis ex, nec cursus metus pharetra quis. Fusce imperdiet nisl nibh, ac aliquet ante elementum vitae.</p>
+
+            <hr class="hr">
+
+            <h2>Opciones de Formato</h2>
+            <div class="row">
+                <div class="col-12 col-md-4 my-1">
+                    <button id="btn-negrita" class="btn d-block w-100 btn-primary" data-funcion="negrita">
+                        Bold (Negrita)
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 my-1">
+                    <button id="btn-cursiva" class="btn d-block w-100 btn-primary" data-funcion="cursiva">
+                        Italic (Cursiva)
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 my-1">
+                    <button id="btn-subrayado" class="btn d-block w-100 btn-primary" data-funcion="subrayado">
+                        Underline (Subrayado)
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 my-1">
+                    <button id="btn-color" class="btn d-block w-100 btn-primary" data-funcion="color">
+                        Color (Sin Estilo)
+                    </button>
+                </div>
+                <div class="col-12 col-md-4 my-1">
+                    <input type="number" class="form-control" id="tamanioTexto" placeholder="Tamaño de Texto">
+                    <button class="btn btn-primary" id="btn-cambiar-tamanio">Cambiar Tamaño</button>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="nuevoTexto" placeholder="Escribe un nuevo texto">
+                    <button class="btn btn-primary" id="btn-guardar-texto">Guardar Texto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    /**
+            *TIPOGRAFIAS = mono space 
+    */
+
+    function toggleStyle(styleName) {
+        const textoElement = document.getElementById("texto");
+        const currentStyles = textoElement.classList;
+
+        if (currentStyles.contains(styleName)) {
+            // Si el estilo está presente, quitarlo
+            currentStyles.remove(styleName);
+        } else {
+            // Si el estilo no está presente, agregarlo
+            currentStyles.add(styleName);
+        }
+    }
+
+    function updateButtonState(buttonId, styleName) {
+        const button = document.getElementById(buttonId);
+        const textoElement = document.getElementById("texto");
+
+        if (textoElement.classList.contains(styleName)) {
+            button.textContent = styleName.charAt(0).toUpperCase() + styleName.slice(1) + " (Activado)";
+        } else {
+            button.textContent = styleName.charAt(0).toUpperCase() + styleName.slice(1);
+        }
+    }
+
+    function funcionNegrita() {
+        toggleStyle("bold");
+        updateButtonState("btn-negrita", "bold");
+    }
+
+    function funcionCursiva() {
+        toggleStyle("italic");
+        updateButtonState("btn-cursiva", "italic");
+    }
+
+    function funcionSubrayado() {
+        toggleStyle("underline");
+        updateButtonState("btn-subrayado", "underline");
+    }
+
+    function funcionSinEstilo() {
+        // Eliminar todos los estilos aplicados al texto
+        const textoElement = document.getElementById("texto");
+        textoElement.classList.remove("bold");
+        textoElement.classList.remove("italic");
+        textoElement.classList.remove("underline");
+
+        // Cambiar el color del texto a rojo
+        textoElement.style.color = "red";
+
+        // Actualizar el estado de los botones
+        updateButtonState("btn-negrita", "bold");
+        updateButtonState("btn-cursiva", "italic");
+        updateButtonState("btn-subrayado", "underline");
+        updateButtonState("btn-color", "sin-estilo");
+    }
+
+    function funcionEditarTexto() {
+        const nuevoTextoInput = document.getElementById("nuevoTexto");
+        const textoElement = document.getElementById("texto");
+
+        // Obtener el valor del input y establecerlo como el nuevo texto
+        const nuevoTexto = nuevoTextoInput.value;
+        textoElement.textContent = nuevoTexto;
+
+        // Limpiar el input después de guardar el texto
+        nuevoTextoInput.value = "";
+    }
+
+    function funcionCambiarTamanioTexto() {
+        const tamanioTextoInput = document.getElementById("tamanioTexto");
+        const textoElement = document.getElementById("texto");
+
+        // Obtener el valor del input y establecerlo como el tamaño de fuente del texto
+        const nuevoTamanio = tamanioTextoInput.value + "px";
+        textoElement.style.fontSize = nuevoTamanio;
+
+        // Limpiar el input después de cambiar el tamaño del texto
+        tamanioTextoInput.value = "";
+    }
+
+    function handlerBoton(e) {
+        const funcionBoton = e.target.dataset.funcion;
+        switch (funcionBoton) {
+            case 'negrita':
+                funcionNegrita();
+                break;
+            case 'cursiva':
+                funcionCursiva();
+                break;
+            case 'subrayado':
+                funcionSubrayado();
+                break;
+            case 'color':
+                funcionSinEstilo();
+                break;
+        }
+    }
+
+    document.querySelectorAll('button.btn').forEach(e => e.addEventListener('click', handlerBoton));
+
+    // Controlador de evento para el botón "Guardar Texto"
+    const btnGuardarTexto = document.getElementById("btn-guardar-texto");
+    btnGuardarTexto.addEventListener("click", function() {
+        funcionEditarTexto();
+    });
+
+    // Controlador de evento para el botón "Cambiar Tamaño"
+    const btnCambiarTamanio = document.getElementById("btn-cambiar-tamanio");
+    btnCambiarTamanio.addEventListener("click", function() {
+        funcionCambiarTamanioTexto();
+    });
+
+    // Actualizar el estado de los botones al cargar la página
+    updateButtonState("btn-negrita", "bold");
+    updateButtonState("btn-cursiva", "italic");
+    updateButtonState("btn-subrayado", "underline");
+    updateButtonState("btn-color", "sin-estilo");
+</script>
+</body>
+</html>
