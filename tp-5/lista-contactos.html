@@ -56,6 +56,8 @@
             },
         ];
 
+        let mostrarFavoritos = false;
+
         // Función para agregar un contacto
         function agregarContacto(nombre, apellido, telefono) {
             const nuevoContacto = {
@@ -73,7 +75,10 @@
             const lista = document.getElementById('lista-contactos');
             lista.innerHTML = '';
 
-            for (const contacto of contactos) {
+            // Filtra los favoritos si se selecciona la opción
+            const contactosAMostrar = mostrarFavoritos ? contactos.filter(c => c.favorito) : contactos;
+
+            for (const contacto of contactosAMostrar) {
                 const li = document.createElement('li');
                 li.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'mb-2'); // Agrega clases de Bootstrap para el diseño
 
@@ -117,6 +122,8 @@
             }
         }
 
+        
+
         // Función para cambiar el orden de la lista
         function cambiarOrden() {
             const ordenarPor = document.getElementById('ordenar').value;
@@ -137,10 +144,18 @@
             mostrarListado();
         }
 
-        // Función para ver solo los contactos favoritos
+        // Función para ver solo los contactos favoritos o la lista completa
         function verFavoritos() {
-            const favoritos = contactos.filter(c => c.favorito);
-            contactos = favoritos;
+            if (mostrarFavoritos) {
+                // Si ya se estaban mostrando los favoritos, muestra la lista completa
+                mostrarFavoritos = false;
+                document.querySelector('button.btn-info').textContent = 'Ver Favoritos'; // Cambia el texto del botón
+            } else {
+                // Si no se estaban mostrando los favoritos, filtra y muestra los favoritos
+                mostrarFavoritos = true;
+                document.querySelector('button.btn-info').textContent = 'Lista Completa'; // Cambia el texto del botón
+            }
+
             mostrarListado();
         }
 
