@@ -51,65 +51,65 @@
              * Esta función se llama cuando el usuario envía el formulario con el nombre del producto para agregar.
              */
              function agregarProducto(nombreProducto) {
-        // Crear un nuevo elemento de lista <li> con las clases de Bootstrap
-        const listaItem = document.createElement("li");
-        listaItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
-
-        // Contenido del elemento de lista
-        listaItem.innerHTML = `
-            <span>${nombreProducto}</span>
-            <button class="btn btn-danger btn-sm" onclick="eliminarProducto(this)">Eliminar</button>
-        `;
-
-        // Obtener la lista de productos <ul> y agregar el nuevo elemento <li>
-        const listaProductosElement = document.getElementById("lista-productos");
-        listaProductosElement.appendChild(listaItem);
-
-        // Ordenar alfabéticamente la lista de productos
-        ordenarListaProductos();
-    }
-
-    // Función para limpiar la lista de productos
-    function limpiarLista() {
-        const listaProductosElement = document.getElementById("lista-productos");
-        listaProductosElement.innerHTML = "";
-    }
-
-    // Función para ordenar alfabéticamente la lista de productos
-    function ordenarListaProductos() {
-        const listaProductosElement = document.getElementById("lista-productos");
-        const productos = Array.from(listaProductosElement.children);
-        productos.sort((a, b) => {
-            return a.textContent.localeCompare(b.textContent);
-        });
-
-        // Limpiar la lista actual
-        limpiarLista();
-
-        // Agregar los productos ordenados
-        productos.forEach((producto) => {
-            listaProductosElement.appendChild(producto);
-        });
-    }
-
-    function eliminarProducto(button) {
-        const listItem = button.parentElement;
-        const listaProductosElement = document.getElementById("lista-productos");
-        listaProductosElement.removeChild(listItem);
-    }
-
-    function handlerFormulario(e) {
-        e.preventDefault();
-        const input = e.target.querySelector('input');
-        const nombreProducto = input.value.trim(); // Trim para eliminar espacios en blanco al principio y al final
-        if (nombreProducto !== "") {
-            input.value = "";
-            agregarProducto(nombreProducto);
-        }
-    }
-
-    document.getElementById('limpiar-lista').addEventListener('click', limpiarLista);
-    document.querySelector('form').addEventListener('submit', handlerFormulario);
+                // Crear un nuevo elemento de lista <li> con las clases de Bootstrap
+                const listaItem = document.createElement("li");
+                listaItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+        
+                // Contenido del elemento de lista
+                listaItem.innerHTML = `
+                    <span>${nombreProducto}</span>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarProducto(this)">Eliminar</button>
+                `;
+        
+                // Obtener la lista de productos <ul> y agregar el nuevo elemento <li>
+                const listaProductosElement = document.getElementById("lista-productos");
+                listaProductosElement.appendChild(listaItem);
+        
+                // Ordenar alfabéticamente la lista de productos
+                ordenarListaProductos();
+            }
+        
+            // Función para limpiar la lista de productos
+            function limpiarLista() {
+                const listaProductosElement = document.getElementById("lista-productos");
+                listaProductosElement.innerHTML = "";
+            }
+        
+            // Función para ordenar alfabéticamente la lista de productos
+            function ordenarListaProductos() {
+                const listaProductosElement = document.getElementById("lista-productos");
+                const productos = Array.from(listaProductosElement.children);
+                productos.sort((a, b) => {
+                    return a.textContent.localeCompare(b.textContent);
+                });
+        
+                // Limpiar la lista actual
+                limpiarLista();
+        
+                // Agregar los productos ordenados
+                productos.forEach((producto) => {
+                    listaProductosElement.appendChild(producto);
+                });
+            }
+        
+            function eliminarProducto(button) {
+                const listItem = button.parentElement;
+                const listaProductosElement = document.getElementById("lista-productos");
+                listaProductosElement.removeChild(listItem);
+            }
+        
+            function handlerFormulario(e) {
+                e.preventDefault();
+                const input = e.target.querySelector('input');
+                const nombreProducto = input.value.trim(); // Trim para eliminar espacios en blanco al principio y al final
+                if (nombreProducto !== "") {
+                    input.value = "";
+                    agregarProducto(nombreProducto);
+                }
+            }
+        
+            document.getElementById('limpiar-lista').addEventListener('click', limpiarLista);
+            document.querySelector('form').addEventListener('submit', handlerFormulario);
         </script>
     </body>
 </html>
