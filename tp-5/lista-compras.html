@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Lista de Compras - DOM y JavaScript</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    </head>
-    <body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lista de Compras - DOM y JavaScript</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
 
-        <div class="container my-1 my-sm-2 my-md-4 my-lg-5">
-            <h1>Lista de Compras</h1>
-            <p class="lead">El objetivo es construir una lista de compras donde se puedan agregar productos.</p>
-            <h2 class="h3">Objetivos Adicionales</h2>
-            <ol>
-                <li>Agregar funcionalidad para limpiar la lista, eliminando todos los productos.</li>
-                <li>Ordenar alfabéticamente la lista de productos.</li>
-                <li>Agregar opción para eliminar cada elemento de forma individual.</li>
-            </ol>
+<div class="container my-1 my-sm-2 my-md-4 my-lg-5">
+    <h1>Lista de Compras</h1>
+    <p class="lead">El objetivo es construir una lista de compras donde se puedan agregar productos.</p>
+    <h2 class="h3">Objetivos Adicionales</h2>
+    <ol>
+        <li>Agregar funcionalidad para limpiar la lista, eliminando todos los productos.</li>
+        <li>Ordenar alfabéticamente la lista de productos.</li>
+        <li>Agregar opción para eliminar cada elemento de forma individual.</li>
+    </ol>
 
-            <!-- Card de Aplicación -->
-            <div class="card">
-                <div class="card-body">
-                    <h2>Listado de Productos</h2>
+    <!-- Card de Aplicación -->
+    <div class="card">
+        <div class="card-body">
+            <h2>Listado de Productos</h2>
 
+            <ul id="lista-productos" class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Pan</span>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarProducto(this)">Eliminar</button>
+                <!-- Agrega más elementos aquí -->
+            </ul>
+            <button id="limpiar-lista" class="btn btn-primary">Limpiar Lista</button>
 
-                    <ul id="lista-productos">
-                        <li>Pan</li>
-                    </ul>
-                    <button id="limpiar-lista" class="btn btn-primary">Limpiar Lista</button>
+            <hr class="hr">
 
-                    <hr class="hr">
-
-                    <h2>Agregar Producto</h2>
-                    <form id="form-producto">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="Nombre del Producto">
-                            <button class="btn btn-primary" type="submit">Agregar Producto</button>
-                        </div>
-                    </form> 
+            <h2>Agregar Producto</h2>
+            <form id="form-producto">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" aria-label="Nombre del Producto">
+                    <button class="btn btn-primary" type="submit">Agregar Producto</button>
                 </div>
-            </div>
+            </form>
         </div>
-
+    </div>
+</div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script type="text/javascript">
 
@@ -49,75 +50,66 @@
              * agregarProducto()
              * Esta función se llama cuando el usuario envía el formulario con el nombre del producto para agregar.
              */
-            function agregarProducto(nombreProducto) {
-                // Crear un nuevo elemento de lista <li>
-                const listaItem = document.createElement("li");
+             function agregarProducto(nombreProducto) {
+        // Crear un nuevo elemento de lista <li> con las clases de Bootstrap
+        const listaItem = document.createElement("li");
+        listaItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
 
-                // Contenido del elemento de lista
-                listaItem.textContent = nombreProducto;
+        // Contenido del elemento de lista
+        listaItem.innerHTML = `
+            <span>${nombreProducto}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarProducto(this)">Eliminar</button>
+        `;
 
-                // Crear un botón "Eliminar" para eliminar este elemento
-                const botonBorrar = document.createElement("button");
-                botonBorrar.textContent = "Eliminar";
-                botonBorrar.classList.add("btn", "btn-danger");
+        // Obtener la lista de productos <ul> y agregar el nuevo elemento <li>
+        const listaProductosElement = document.getElementById("lista-productos");
+        listaProductosElement.appendChild(listaItem);
 
-                // Agregar un manejador de eventos para el botón "Eliminar"
-                botonBorrar.addEventListener("click", function () {
-                    eliminarProducto(listaItem);
-                });
+        // Ordenar alfabéticamente la lista de productos
+        ordenarListaProductos();
+    }
 
-                // Agregar el botón "Eliminar" al elemento de lista
-                listaItem.appendChild(botonBorrar);
+    // Función para limpiar la lista de productos
+    function limpiarLista() {
+        const listaProductosElement = document.getElementById("lista-productos");
+        listaProductosElement.innerHTML = "";
+    }
 
-                // Obtener la lista de productos <ul> y agregar el nuevo elemento <li>
-                const listaProductosElement = document.getElementById("lista-productos");
-                listaProductosElement.appendChild(listaItem);
+    // Función para ordenar alfabéticamente la lista de productos
+    function ordenarListaProductos() {
+        const listaProductosElement = document.getElementById("lista-productos");
+        const productos = Array.from(listaProductosElement.children);
+        productos.sort((a, b) => {
+            return a.textContent.localeCompare(b.textContent);
+        });
 
-                // Ordenar alfabéticamente la lista de productos
-                ordenarListaProductos();
-            }
+        // Limpiar la lista actual
+        limpiarLista();
 
-            // Función para limpiar la lista de productos
-            function limpiarLista() {
-                const listaProductosElement = document.getElementById("lista-productos");
-                listaProductosElement.innerHTML = "";
-            }
+        // Agregar los productos ordenados
+        productos.forEach((producto) => {
+            listaProductosElement.appendChild(producto);
+        });
+    }
 
-            // Función para ordenar alfabéticamente la lista de productos
-            function ordenarListaProductos() {
-                const listaProductosElement = document.getElementById("lista-productos");
-                const productos = Array.from(listaProductosElement.children);
-                productos.sort((a, b) => {
-                    return a.textContent.localeCompare(b.textContent);
-                });
+    function eliminarProducto(button) {
+        const listItem = button.parentElement;
+        const listaProductosElement = document.getElementById("lista-productos");
+        listaProductosElement.removeChild(listItem);
+    }
 
-                // Limpiar la lista actual
-                limpiarLista();
+    function handlerFormulario(e) {
+        e.preventDefault();
+        const input = e.target.querySelector('input');
+        const nombreProducto = input.value.trim(); // Trim para eliminar espacios en blanco al principio y al final
+        if (nombreProducto !== "") {
+            input.value = "";
+            agregarProducto(nombreProducto);
+        }
+    }
 
-                // Agregar los productos ordenados
-                productos.forEach((producto) => {
-                    listaProductosElement.appendChild(producto);
-                });
-            }
-
-            // Función para eliminar un producto individualmente
-            function eliminarProducto(item) {
-                const listaProductosElement = document.getElementById("lista-productos");
-                listaProductosElement.removeChild(item);
-            }
-
-            function agregarFormulario(e) {
-                e.preventDefault();
-                const input = e.target.querySelector('input');
-                const nombreProducto = input.value.trim(); // Trim para eliminar espacios en blanco al principio y al final
-                if (nombreProducto !== "") {
-                    input.value = "";
-                    agregarProducto(nombreProducto);
-                }
-            }
-
-            document.getElementById('limpiar-lista').addEventListener('click', limpiarLista);
-            document.querySelector('form').addEventListener('submit', agregarFormulario);
+    document.getElementById('limpiar-lista').addEventListener('click', limpiarLista);
+    document.querySelector('form').addEventListener('submit', handlerFormulario);
         </script>
     </body>
 </html>
